@@ -13,7 +13,7 @@ class Program
 
     // Rum: [type, label]
     // types: battle, treasure, shop, rest, boss
-    static List<string[]> Rooms = new List<string[]>();
+    static List<Room> Rooms = new List<Room>();
 
     // Fiendemallar: [type, name, HP, ATK, DEF, XPReward, GoldReward]
     static List<string[]> EnemyTemplates = new List<string[]>();
@@ -114,13 +114,13 @@ class Program
 
         // Initiera karta (linjärt äventyr)
         Rooms.Clear();
-        Rooms.Add(new[] { "battle", "Skogsstig" });
-        Rooms.Add(new[] { "treasure", "Gammal kista" });
-        Rooms.Add(new[] { "shop", "Vandrande köpman" });
-        Rooms.Add(new[] { "battle", "Grottans mynning" });
-        Rooms.Add(new[] { "rest", "Lägereld" });
-        Rooms.Add(new[] { "battle", "Grottans djup" });
-        Rooms.Add(new[] { "boss", "Urdraken" });
+        Rooms.Add(new Room("battle", "Skogsstig"));
+        Rooms.Add(new Room("treasure", "Gammal kista"));
+        Rooms.Add(new Room("shop", "Vandrande köpman"));
+        Rooms.Add(new Room("battle", "Grottans mynning"));
+        Rooms.Add(new Room("rest", "Lägereld"));
+        Rooms.Add(new Room("battle", "Grottans djup"));
+        Rooms.Add(new BossRoom("Urdraken"));
 
         CurrentRoomIndex = 0;
 
@@ -133,9 +133,10 @@ class Program
         while (true)
         {
             var room = Rooms[CurrentRoomIndex];
-            Console.WriteLine($"--- Rum {CurrentRoomIndex + 1}/{Rooms.Count}: {room[1]} ({room[0]}) ---");
+            Console.WriteLine($"--- Rum {CurrentRoomIndex + 1}/{Rooms.Count}: {room.Label} ({room.Type}) ---");
+            
+            bool continueAdventure = EnterRoom(room);
 
-            bool continueAdventure = EnterRoom(room[0]);
             
             if (IsPlayerDead())
             {
@@ -175,9 +176,10 @@ class Program
 
     // ======= Rumshantering =======
 
-    static bool EnterRoom(string type)
+    static bool EnterRoom(Room room)
     {
-        switch ((type ?? "battle").Trim())
+        switch ((room.Type ?? "battle").Trim())
+        
         {
             case "battle":
                 return DoBattle(isBoss: false);
