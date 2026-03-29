@@ -658,22 +658,3 @@ class Program
         }
     }
 }
-class Enemy
-{
-    public string Name;
-    public int Health;
-    public int Attack;
-    public int Defense;
-    public int Xp;
-    public int Gold;
-
-    public Enemy(string name, int health, int attack, int defense, int xp, int gold)
-    {
-        Name = name;
-        Health = health;
-        Attack = attack;
-        Defense = defense;
-        Xp = xp;
-        Gold = gold;
-    }
-}
