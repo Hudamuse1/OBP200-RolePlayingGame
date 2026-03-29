@@ -1,5 +1,5 @@
 ﻿using System.Text;
-
+using System.Linq;
 namespace OBP200_RolePlayingGame;
 
 
@@ -199,18 +199,17 @@ class Program
 
     static bool DoBattle(bool isBoss)
     {
-        var enemy = GenerateEnemy(isBoss);
-        Console.WriteLine($"En {enemy[1]} dyker upp! (HP {enemy[2]}, ATK {enemy[3]}, DEF {enemy[4]})");
-
-        int enemyHp = ParseInt(enemy[2], 10);
-        int enemyAtk = ParseInt(enemy[3], 3);
-        int enemyDef = ParseInt(enemy[4], 0);
+        Enemy enemy = GenerateEnemy(isBoss);
+        Console.WriteLine($"En {enemy.Name} dyker upp! (HP {enemy.Health}, ATK {enemy.Attack}, DEF {enemy.Defense})");
+        int enemyHp = enemy.Health;
+        int enemyAtk = enemy.Attack;
+        int enemyDef = enemy.Defense;
 
         while (enemyHp > 0 && !IsPlayerDead())
         {
             Console.WriteLine();
             ShowStatus();
-            Console.WriteLine($"Fiende: {enemy[1]} HP={enemyHp}");
+            Console.WriteLine($"Fiende: {enemy.Name} HP={enemyHp}");
             Console.WriteLine("[A] Attack   [X] Special   [P] Dryck   [R] Fly");
             if (isBoss) Console.WriteLine("(Du kan inte fly från en boss!)");
             Console.Write("Val: ");
@@ -221,13 +220,13 @@ class Program
             {
                 int damage = CalculatePlayerDamage(enemyDef);
                 enemyHp -= damage;
-                Console.WriteLine($"Du slog {enemy[1]} för {damage} skada.");
+
             }
             else if (cmd == "X")
             {
                 int special = UseClassSpecial(enemyDef, isBoss);
                 enemyHp -= special;
-                Console.WriteLine($"Special! {enemy[1]} tar {special} skada.");
+                Console.WriteLine($"Special! {enemy.Name} tar {special} skada.");
             }
             else if (cmd == "P")
             {
@@ -255,7 +254,7 @@ class Program
             // Fiendens tur
             int enemyDamage = CalculateEnemyDamage(enemyAtk);
             ApplyDamageToPlayer(enemyDamage);
-            Console.WriteLine($"{enemy[1]} anfaller och gör {enemyDamage} skada!");
+            Console.WriteLine($"{enemy.Name} anfaller och gör {enemyDamage} skada!");
         }
 
         if (IsPlayerDead())
@@ -264,37 +263,35 @@ class Program
         }
 
         // Vinstrapporter, XP, guld, loot
-        int xpReward = ParseInt(enemy[5], 5);
-        int goldReward = ParseInt(enemy[6], 3);
+        int xpReward = enemy.Xp;
+        int goldReward = enemy.Gold;
 
         AddPlayerXp(xpReward);
         AddPlayerGold(goldReward);
 
         Console.WriteLine($"Seger! +{xpReward} XP, +{goldReward} guld.");
-        MaybeDropLoot(enemy[1]);
+        MaybeDropLoot(enemy.Name);
 
         return true;
     }
 
-    static string[] GenerateEnemy(bool isBoss)
+    static Enemy GenerateEnemy(bool isBoss)
     {
         if (isBoss)
         {
-            // Boss-mall
-            return new[] { "boss", "Urdraken", "55", "9", "4", "30", "50" };
+            return new Enemy("Urdraken", 55, 9, 4, 30, 50);
         }
         else
         {
-            // Slumpa bland templates
             var template = EnemyTemplates[Rng.Next(EnemyTemplates.Count)];
-            
-            // Slmumpmässig justering av stats
+
             int hp = ParseInt(template[2], 10) + Rng.Next(-1, 3);
             int atk = ParseInt(template[3], 3) + Rng.Next(0, 2);
             int def = ParseInt(template[4], 0) + Rng.Next(0, 2);
             int xp = ParseInt(template[5], 4) + Rng.Next(0, 3);
             int gold = ParseInt(template[6], 2) + Rng.Next(0, 3);
-            return new[] { template[0], template[1], hp.ToString(), atk.ToString(), def.ToString(), xp.ToString(), gold.ToString() };
+
+            return new Enemy(template[1], hp, atk, def, xp, gold);
         }
     }
 
@@ -659,5 +656,24 @@ class Program
         {
             return fallback;
         }
+    }
+}
+class Enemy
+{
+    public string Name;
+    public int Health;
+    public int Attack;
+    public int Defense;
+    public int Xp;
+    public int Gold;
+
+    public Enemy(string name, int health, int attack, int defense, int xp, int gold)
+    {
+        Name = name;
+        Health = health;
+        Attack = attack;
+        Defense = defense;
+        Xp = xp;
+        Gold = gold;
     }
 }
