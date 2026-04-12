@@ -2,12 +2,12 @@ namespace OBP200_RolePlayingGame;
 
 public class Enemy
 {
-    public string Name { get; set; }
-    public int Health { get; set; }
-    public int Attack { get; set; }
-    public int Defense { get; set; }
-    public int Xp { get; set; }
-    public int Gold { get; set; }
+    public string Name { get; private set; }
+    public int Health { get; private set; }
+    public int Attack { get; private set; }
+    public int Defense { get; private set; }
+    public int Xp { get; private set; }
+    public int Gold { get; private set; }
 
     public Enemy(string name, int health, int attack, int defense, int xp, int gold)
     {
