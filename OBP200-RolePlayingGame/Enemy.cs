@@ -18,4 +18,22 @@ public class Enemy
         Xp = xp;
         Gold = gold;
     }
+
+    public void TakeDamage(int damge)
+    {
+       int actualDamage = damge - Defense;
+       if (actualDamage < 0)
+       {
+           actualDamage = 0;
+       }
+       Health -= actualDamage;
+       if (Health <= 0)
+       {
+           Health = 0;
+       }
+    }
+    public bool isDead()
+    {
+        return Health <= 0;
+    }
 } // Refaktorerade enemy till Enemy klass
