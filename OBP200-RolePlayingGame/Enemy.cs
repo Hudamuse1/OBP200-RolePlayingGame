@@ -36,4 +36,4 @@ public class Enemy
     {
         return Health <= 0;
     }
-} // Refaktorerade enemy till Enemy klass
+} // Implementerat inkapsling i Enemy och lagt till TakeDamage och IsDead metoder . 
