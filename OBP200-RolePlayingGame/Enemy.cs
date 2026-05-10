@@ -32,7 +32,7 @@ public class Enemy
            Health = 0;
        }
     }
-    public bool isDead()
+    public bool IsDead()
     {
         return Health <= 0;
     }

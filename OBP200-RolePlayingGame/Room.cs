@@ -16,7 +16,7 @@ public class BossRoom : Room
 {
     public Enemy Boss { get; private set; }
 
-    public BossRoom(string label, Enemy boss) : base("bbossroom", label)
+    public BossRoom(string label, Enemy boss) : base("boss", label)
     {
         Boss = boss;
     }
