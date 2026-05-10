@@ -14,7 +14,16 @@ public class Room
 
 public class BossRoom : Room
 {
-    public BossRoom(string label) : base("boss", label)
+    public Enemy Boss { get; private set; }
+
+    public BossRoom(string label, Enemy boss) : base("bbossroom", label)
     {
+        Boss = boss;
+    }
+
+    public void EnterRoom()
+    {
+        Console.WriteLine($"Du har gått in i: {Label}");
+        Console.WriteLine($"En kraftfull boss dyker upp: {Boss.Name}");
     }
 }

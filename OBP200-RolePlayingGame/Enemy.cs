@@ -19,9 +19,9 @@ public class Enemy
         Gold = gold;
     }
 
-    public void TakeDamage(int damge)
+    public void TakeDamage(int damage)
     {
-       int actualDamage = damge - Defense;
+       int actualDamage = damage - Defense;
        if (actualDamage < 0)
        {
            actualDamage = 0;
